@@ -128,7 +128,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-  HAL_IncTick();   // uwTick 自增
+  HAL_IncTick();   // uwTick自增
 }
 
 /******************************************************************************/
