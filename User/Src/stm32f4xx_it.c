@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @brief   Main Interrupt Service Routines.
   *          This file provides template for all exceptions handler and 
-  *          peripherals interrupt service routine.  
+  *          peripherals interrupt service routine. 
   *          中断服务程序
   ******************************************************************************
   */
@@ -128,7 +128,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-  HAL_IncTick();   // uwTick 自增 
+  HAL_IncTick();   // uwTick 自增
 }
 
 /******************************************************************************/
