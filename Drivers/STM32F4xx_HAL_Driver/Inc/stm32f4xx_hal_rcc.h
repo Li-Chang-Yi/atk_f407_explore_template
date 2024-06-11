@@ -1,17 +1,12 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_hal_rcc.h
-  * @author  MCD Application Team
-  * @brief   Header file of RCC HAL module.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * @author  MCD Application Team-Li Changyi comment 2024.6.12
+  * @brief   Header file of RCC HAL module. 复位和时钟控制 HAL模块头文件
+  * @content 1.RCC晶振开关状态配置 包含PLL结构体配置 
+  *          2.RCC时钟配置——时钟源、总线分频系数 
+  *          3.外设时钟使能以及判断是否使能的宏定义
+  *          4.RCC晶振配置函数、RCC时钟配置、MCO配置函数   从1237行开始
   ******************************************************************************
   */
 
@@ -28,7 +23,7 @@
 
 /* Include RCC HAL Extended module */
 /* (include on top of file since RCC structures are defined in extended file) */
-#include "stm32f4xx_hal_rcc_ex.h"
+#include "stm32f4xx_hal_rcc_ex.h"   // RCC 结构体定义在扩展文件中 所以包含
 
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{
@@ -39,7 +34,7 @@
   */
 
 /* Exported types ------------------------------------------------------------*/
-/** @defgroup RCC_Exported_Types RCC Exported Types
+/** @defgroup RCC_Exported_Types RCC Exported Types   // 头文件更像是C文件导出的函数名列表
   * @{
   */
 
@@ -67,7 +62,7 @@ typedef struct
                                       This parameter can be a value of @ref RCC_LSI_Config                        */
 
   RCC_PLLInitTypeDef PLL;        /*!< PLL structure parameters                                                    */
-}RCC_OscInitTypeDef;
+}RCC_OscInitTypeDef;    // 晶振配置结构体 包含PLL
 
 /**
   * @brief  RCC System, AHB and APB busses clock configuration structure definition
@@ -89,7 +84,7 @@ typedef struct
   uint32_t APB2CLKDivider;        /*!< The APB2 clock (PCLK2) divider. This clock is derived from the AHB clock (HCLK).
                                        This parameter can be a value of @ref RCC_APB1_APB2_Clock_Source */
 
-}RCC_ClkInitTypeDef;
+}RCC_ClkInitTypeDef;   // 时钟配置结构体
 
 /**
   * @}
@@ -1239,9 +1234,9 @@ typedef struct
   * @{
   */
 /* Initialization and de-initialization functions  ******************************/
-HAL_StatusTypeDef HAL_RCC_DeInit(void);
-HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef *RCC_OscInitStruct);
-HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);
+HAL_StatusTypeDef HAL_RCC_DeInit(void);                                                          // 复位 RCC 配置到默认状态
+HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef *RCC_OscInitStruct);                      // 配置晶振
+HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency); // 配置系统时钟（SYSCLK）和总线时钟（HCLK、PCLK1、PCLK2）
 /**
   * @}
   */
@@ -1250,15 +1245,15 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uin
   * @{
   */
 /* Peripheral Control functions  ************************************************/
-void     HAL_RCC_MCOConfig(uint32_t RCC_MCOx, uint32_t RCC_MCOSource, uint32_t RCC_MCODiv);
-void     HAL_RCC_EnableCSS(void);
-void     HAL_RCC_DisableCSS(void);
-uint32_t HAL_RCC_GetSysClockFreq(void);
-uint32_t HAL_RCC_GetHCLKFreq(void);
+void     HAL_RCC_MCOConfig(uint32_t RCC_MCOx, uint32_t RCC_MCOSource, uint32_t RCC_MCODiv);      // 配置微控制器时钟输出（MCO）
+void     HAL_RCC_EnableCSS(void);                                                                // 启用时钟安全系统（Clock Security System，CSS）
+void     HAL_RCC_DisableCSS(void);                                                               // 检测外部时钟源（如 HSE）故障，并自动切换到内部时钟源
+uint32_t HAL_RCC_GetSysClockFreq(void);                                                          // 获取系统时钟（SYSCLK）频率
+uint32_t HAL_RCC_GetHCLKFreq(void);                                                              // SYSCLK ---> AHBCLKDivider ---> HCLK
 uint32_t HAL_RCC_GetPCLK1Freq(void);
 uint32_t HAL_RCC_GetPCLK2Freq(void);
-void     HAL_RCC_GetOscConfig(RCC_OscInitTypeDef *RCC_OscInitStruct);
-void     HAL_RCC_GetClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t *pFLatency);
+void     HAL_RCC_GetOscConfig(RCC_OscInitTypeDef *RCC_OscInitStruct);                            // 获取当前的晶振配置
+void     HAL_RCC_GetClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t *pFLatency);     // 获取当前的时钟配置
 
 /* CSS NMI IRQ handler */
 void HAL_RCC_NMI_IRQHandler(void);

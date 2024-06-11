@@ -1,18 +1,9 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_hal_rcc_ex.h
-  * @author  MCD Application Team
-  * @brief   Header file of RCC HAL Extension module.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  ******************************************************************************
+  * @author  MCD Application Team-Li Changyi comment 2024.6.12
+  * @brief   Header file of RCC HAL Extension module. HAL库RCC扩展模块头文件
+  * @content 1.PLL配置结构体
   */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/

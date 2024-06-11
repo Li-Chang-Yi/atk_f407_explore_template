@@ -90,20 +90,20 @@ void sys_soft_reset(void)
 }
 
 /**
- * @brief       时钟设置函数
- * @param       plln: 主PLL倍频系数(PLL倍频), 取值范围: 64~432.
- * @param       pllm: 主PLL和音频PLL预分频系数(进PLL之前的分频), 取值范围: 2~63.
- * @param       pllp: 主PLL的p分频系数(PLL之后的分频), 分频后作为系统时钟, 取值范围: 2, 4, 6, 8.(仅限这4个值)
- * @param       pllq: 主PLL的q分频系数(PLL之后的分频), 取值范围: 2~15.
+ * @brief       时钟设置函数(怎么算的)
+ * @param       pllm: PLL的预分频系数m(进PLL之前的分频), m: 2~63.                     (HSI | HSE)/m
+ * @param       plln: PLL倍频系数n, n: 64~432.                                        [(HSI | HSE)/m]*n         Fvco
+ * @param       pllp: PLL的分频系数p, 分频后作为系统时钟, p: 2, 4, 6, 8.(仅限这4个值) [(HSI | HSE)/m]*n/p       Fsys
+ * @param       pllq: PLL的分频系数q, q: 2~15.                                        [(HSI | HSE)/m]*n/q       Fq     q与系统时钟无关
  * @note
  *
- *              Fvco: VCO频率
+ *              Fvco: VCO频率，PLL 输出的基本频率
  *              Fsys: 系统时钟频率, 也是主PLL的p分频输出时钟频率
  *              Fq:   主PLL的q分频输出时钟频率
  *              Fs:   主PLL输入时钟频率, 可以是HSI, HSE等.
- *              Fvco = Fs * (plln / pllm);
- *              Fsys = Fvco / pllp = Fs * (plln / (pllm * pllp));
- *              Fq   = Fvco / pllq = Fs * (plln / (pllm * pllq));
+ *              Fvco = Fs * (plln / pllm);                             n/m
+ *              Fsys = Fvco / pllp = Fs * (plln / (pllm * pllp));      n/(m*p)
+ *              Fq   = Fvco / pllq = Fs * (plln / (pllm * pllq));      n/(m*q)
  *
  *              外部晶振为 8M的时候, 推荐值: plln = 336, pllm = 8, pllp = 2, pllq = 7.
  *              得到:Fvco = 8 * (336 / 8) = 336Mhz
@@ -141,14 +141,14 @@ uint8_t sys_stm32_clock_init(uint32_t plln, uint32_t pllm, uint32_t pllp, uint32
     {
         return 1;                                                /* 时钟初始化失败，可以在这里加入自己的处理 */
     }
-
-    /* 选中PLL作为系统时钟源SYSCLK并且配置AHB-HCLK,APB1-PCLK1和APB2-PCLK2 */
+    /* HSE | HSI -> PLLSource -> HSE -> PLLN\PLLM\PLLP\PLLQ -> PLLCLK | HSE | HSI -> SYSCLKSource & CSS  -> SYSCLK */
+    /* 选中PLLCLK作为系统时钟源SYSCLK并且配置AHB-HCLK,APB1-PCLK1和APB2-PCLK2 */
     rcc_clk_init.ClockType = ( RCC_CLOCKTYPE_SYSCLK \
                                     | RCC_CLOCKTYPE_HCLK \
                                     | RCC_CLOCKTYPE_PCLK1 \
                                     | RCC_CLOCKTYPE_PCLK2);
 
-    rcc_clk_init.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;         /* 设置系统时钟时钟源为PLL */
+    rcc_clk_init.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;         /* 设置PLLCLK 为系统时钟SYSCLK的源 */
     rcc_clk_init.AHBCLKDivider = RCC_SYSCLK_DIV1;                /* AHB分频系数为1 */
     rcc_clk_init.APB1CLKDivider = RCC_HCLK_DIV4;                 /* APB1分频系数为4 */
     rcc_clk_init.APB2CLKDivider = RCC_HCLK_DIV2;                 /* APB2分频系数为2 */

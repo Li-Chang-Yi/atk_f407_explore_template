@@ -4,7 +4,7 @@
   * @author  MCD Application Team-Li Changyi comment 2024.6.10
   * @brief   This file contains HAL common defines, enumeration, macros and 
   *          structures definitions. 
-  *          通用定义、枚举、宏、结构体
+  *          HAL库的通用枚举、宏、结构体  例如有状态、锁定、返回值的枚举类型
   ******************************************************************************
 
   */
@@ -41,8 +41,8 @@ typedef enum
 typedef enum 
 {
   HAL_UNLOCKED = 0x00U,
-  HAL_LOCKED   = 0x01U    // 锁定枚举类型
-} HAL_LockTypeDef;
+  HAL_LOCKED   = 0x01U    
+} HAL_LockTypeDef;        // 锁定枚举类型
 
 /* Exported macro ------------------------------------------------------------*/
 
@@ -63,17 +63,7 @@ typedef enum
 // 将外设句柄与 DMA 句柄之间关联 1. 将一个 DMA 句柄与一个外设的 DMA 字段关联 2.将一个外设的句柄设置为 DMA 句柄的父句柄  分行符后面不能有空格
 /** @brief Reset the Handle's State field.
   * @param __HANDLE__ specifies the Peripheral Handle.
-  * @note  This macro can be used for the following purpose: 
-  *          - When the Handle is declared as local variable; before passing it as parameter
-  *            to HAL_PPP_Init() for the first time, it is mandatory to use this macro 
-  *            to set to 0 the Handle's "State" field.
-  *            Otherwise, "State" field may have any random value and the first time the function 
-  *            HAL_PPP_Init() is called, the low level hardware initialization will be missed
-  *            (i.e. HAL_PPP_MspInit() will not be executed).
-  *          - When there is a need to reconfigure the low level hardware: instead of calling
-  *            HAL_PPP_DeInit() then HAL_PPP_Init(), user can make a call to this macro then HAL_PPP_Init().
-  *            In this later function, when the Handle's "State" field is set to 0, it will execute the function
-  *            HAL_PPP_MspInit() which will reconfigure the low level hardware.
+  * @note  宏使用的目的: 
   *          - 当句柄作为局部变量声明时，在第一次将其作为参数传递给 HAL_PPP_Init() 之前，必须使用此宏将句柄的 State 字段设置为 0。
   *            否则，State 字段可能包含任意值，第一次调用 HAL_PPP_Init() 时，可能会跳过底层硬件初始化，即 HAL_PPP_MspInit() 不会被执行
   *          - 当需要重新配置底层硬件时，可以调用此宏然后再调用 HAL_PPP_Init()。在 HAL_PPP_Init() 函数中，
