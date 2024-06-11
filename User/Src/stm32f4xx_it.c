@@ -5,7 +5,7 @@
   * @brief   Main Interrupt Service Routines.
   *          This file provides template for all exceptions handler and 
   *          peripherals interrupt service routine. 
-  *          中断服务程序test
+  *          中断服务程序test code
   ******************************************************************************
   */
 
