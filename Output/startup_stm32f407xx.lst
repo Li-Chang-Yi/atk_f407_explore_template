@@ -107,7 +107,7 @@ ARM Macro Assembler    Page 2
                                                             起始地址
    59 00000000                 EXPORT           __Vectors_End
    60 00000000                 EXPORT           __Vectors_Size
-   61 00000000         ; 以四字节对齐分配内存
+   61 00000000         ; DCD表示以四字节对齐分配内存
    62 00000000 00000000 
                        __Vectors
                                DCD              __initial_sp ; Top of Stack 0x0

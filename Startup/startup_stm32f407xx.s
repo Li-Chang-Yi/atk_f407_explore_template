@@ -58,7 +58,7 @@ __heap_limit	;堆结束地址，低向高生长，动态内存
                 EXPORT  __Vectors	;声明全局属性标号，起始地址
                 EXPORT  __Vectors_End
                 EXPORT  __Vectors_Size
-				; 以四字节对齐分配内存
+				; DCD表示以四字节对齐分配内存
 __Vectors       DCD     __initial_sp               ; Top of Stack 0x0800 0000
                 DCD     Reset_Handler              ; Reset Handler 0x0800 0004
                 DCD     NMI_Handler                ; NMI Handler
