@@ -1,17 +1,9 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_hal_cortex.h
-  * @author  MCD Application Team
+  * @author  MCD Application Team-Li Changyi comment 2024.6.12
   * @brief   Header file of CORTEX HAL module.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * @content 1.内存保护单元MPU配置 2.中断启禁、状态、中断优先组、抢占优先级、响应优先级配置 3. 配置 SysTick 时钟源、重载值、中断处理函数
   ******************************************************************************
   */ 
 
@@ -66,7 +58,7 @@ typedef struct
                                                      This parameter can be a value of @ref CORTEX_MPU_Access_Cacheable              */
   uint8_t                IsBufferable;          /*!< Specifies the bufferable status of the protected region. 
                                                      This parameter can be a value of @ref CORTEX_MPU_Access_Bufferable             */
-}MPU_Region_InitTypeDef;
+}MPU_Region_InitTypeDef; //配置内存保护单元（MPU，Memory Protection Unit）的一个区域的属性，MPU 用于设置不同内存区域的访问权限和属性
 /**
   * @}
   */
@@ -257,35 +249,38 @@ typedef struct
   * @{
   */
 /* Initialization and de-initialization functions *****************************/
-void HAL_NVIC_SetPriorityGrouping(uint32_t PriorityGroup);
-void HAL_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority);
-void HAL_NVIC_EnableIRQ(IRQn_Type IRQn);
-void HAL_NVIC_DisableIRQ(IRQn_Type IRQn);
-void HAL_NVIC_SystemReset(void);
-uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb);
-/**
-  * @}
-  */
+void HAL_NVIC_SetPriorityGrouping(uint32_t PriorityGroup);                                   // 设置 NVIC 的优先级分组
+void HAL_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority);   // 设置中断的优先级(抢占优先级，子优先级）子优先级 = 响应优先级
+void HAL_NVIC_EnableIRQ(IRQn_Type IRQn);                                                     // 启用中断
+void HAL_NVIC_DisableIRQ(IRQn_Type IRQn);                                                    // 禁用中断
+void HAL_NVIC_SystemReset(void);                                                             // 触发系统复位
+uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb);                                             // 配置 SysTick 计时器 `TicksNumb`是 SysTick 计数器的重装载值
+// 优先级分组确定了中断优先级字段中抢占优先级占几位，响应优先级占几位
+// NVIC_PRIORITYGROUP_0: 0 位抢占优先级，4 位响应优先级
+// NVIC_PRIORITYGROUP_1: 1 位抢占优先级，3 位响应优先级
+// NVIC_PRIORITYGROUP_2: 2 位抢占优先级，2 位响应优先级 抢占优先级占用 2 位，可以有 4 个等级（0 到 3） 响应优先级占用 2 位，可以有 4 个等级（0 到 3）
+// NVIC_PRIORITYGROUP_3: 3 位抢占优先级，1 位响应优先级
+// NVIC_PRIORITYGROUP_4: 4 位抢占优先级，0 位响应优先级
 
 /** @addtogroup CORTEX_Exported_Functions_Group2
   * @{
   */
 /* Peripheral Control functions ***********************************************/
-uint32_t HAL_NVIC_GetPriorityGrouping(void);
+uint32_t HAL_NVIC_GetPriorityGrouping(void);                                                  // 获取当前的优先级分组
 void HAL_NVIC_GetPriority(IRQn_Type IRQn, uint32_t PriorityGroup, uint32_t* pPreemptPriority, uint32_t* pSubPriority);
-uint32_t HAL_NVIC_GetPendingIRQ(IRQn_Type IRQn);
-void HAL_NVIC_SetPendingIRQ(IRQn_Type IRQn);
-void HAL_NVIC_ClearPendingIRQ(IRQn_Type IRQn);
-uint32_t HAL_NVIC_GetActive(IRQn_Type IRQn);
-void HAL_SYSTICK_CLKSourceConfig(uint32_t CLKSource);
-void HAL_SYSTICK_IRQHandler(void);
-void HAL_SYSTICK_Callback(void);
+uint32_t HAL_NVIC_GetPendingIRQ(IRQn_Type IRQn);                                              // 获取中断的挂起状态
+void HAL_NVIC_SetPendingIRQ(IRQn_Type IRQn);                                                  // 设置中断为挂起状态
+void HAL_NVIC_ClearPendingIRQ(IRQn_Type IRQn);                                                // 清除中断的挂起状态
+uint32_t HAL_NVIC_GetActive(IRQn_Type IRQn);                                                  // 获取中断的激活状态
+void HAL_SYSTICK_CLKSourceConfig(uint32_t CLKSource);                                         // 配置 SysTick的时钟源
+void HAL_SYSTICK_IRQHandler(void);                                                            // SysTick 中断处理函数
+void HAL_SYSTICK_Callback(void);                                                              // SysTick 中断回调函数
 
 #if (__MPU_PRESENT == 1U)
-void HAL_MPU_Enable(uint32_t MPU_Control);
-void HAL_MPU_Disable(void);
-void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);
-#endif /* __MPU_PRESENT */
+void HAL_MPU_Enable(uint32_t MPU_Control);                                                    // 启用内存保护单元 MPU
+void HAL_MPU_Disable(void);                                                                   // 禁用 MPU
+void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);                                  // 配置 MPU 区域
+#endif /* __MPU_PRESENT */                                                                    // 清除事件（如 WFE 等待事件）
 void HAL_CORTEX_ClearEvent(void);
 /**
   * @}

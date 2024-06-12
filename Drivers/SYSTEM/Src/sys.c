@@ -142,7 +142,7 @@ uint8_t sys_stm32_clock_init(uint32_t plln, uint32_t pllm, uint32_t pllp, uint32
         return 1;                                                /* 时钟初始化失败，可以在这里加入自己的处理 */
     }
     /* HSE | HSI -> PLLSource -> HSE -> PLLN\PLLM\PLLP\PLLQ -> PLLCLK | HSE | HSI -> SYSCLKSource & CSS  -> SYSCLK */
-    /* 选中PLLCLK作为系统时钟源SYSCLK并且配置AHB-HCLK,APB1-PCLK1和APB2-PCLK2 */
+    /* 选中PLLCLK作为系统时钟源SYSCLK并且配置AHB -> HCLK、APB1 -> PCLK1、APB2 -> PCLK2 */
     rcc_clk_init.ClockType = ( RCC_CLOCKTYPE_SYSCLK \
                                     | RCC_CLOCKTYPE_HCLK \
                                     | RCC_CLOCKTYPE_PCLK1 \

@@ -3,7 +3,7 @@
   * @file    stm32f4xx_hal_rcc_ex.h
   * @author  MCD Application Team-Li Changyi comment 2024.6.12
   * @brief   Header file of RCC HAL Extension module. HAL库RCC扩展模块头文件
-  * @content 1.PLL配置结构体
+  * @content 1.PLL配置结构体 2.根据芯片型号特殊化时钟使能或宏
   */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
