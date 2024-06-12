@@ -274,7 +274,7 @@ void HAL_NVIC_ClearPendingIRQ(IRQn_Type IRQn);                                  
 uint32_t HAL_NVIC_GetActive(IRQn_Type IRQn);                                                  // 获取中断的激活状态
 void HAL_SYSTICK_CLKSourceConfig(uint32_t CLKSource);                                         // 配置 SysTick的时钟源
 void HAL_SYSTICK_IRQHandler(void);                                                            // SysTick 中断处理函数
-void HAL_SYSTICK_Callback(void);                                                              // SysTick 中断回调函数
+void HAL_SYSTICK_Callback(void);                                                              // SysTick 中断回调函数 没用到
 
 #if (__MPU_PRESENT == 1U)
 void HAL_MPU_Enable(uint32_t MPU_Control);                                                    // 启用内存保护单元 MPU
